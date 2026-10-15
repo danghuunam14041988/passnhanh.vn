@@ -31,7 +31,15 @@ Mở http://localhost:8765
 
 ## Triển khai
 
-Website đang được kết nối từ GitHub về hosting AZDIGI. Mọi thay đổi merge vào nhánh deploy sẽ lên web thật, nên hãy review kỹ trước khi merge.
+Website triển khai lên hosting AZDIGI (cPanel) qua **Git Version Control**, lấy từ nhánh `main`:
+
+1. cPanel kéo repo về, rồi bấm **Deploy HEAD Commit**.
+2. cPanel chạy các lệnh trong `.cpanel.yml`, copy file website vào `/home/umrhcgry/passnhanh.vn/` (document root của `passnhanh.vn`).
+3. Chỉ các file của website được copy; `.git`, `.claude`, `README.md`, `.cpanel.yml` ở lại trong kho của cPanel.
+
+Khi thêm file hoặc trang mới ở gốc repo, nhớ thêm tên file vào `.cpanel.yml`. File bị xóa khỏi repo sẽ không tự xóa trên hosting.
+
+Mọi thay đổi merge vào `main` và được deploy sẽ lên web thật, nên hãy review kỹ trước khi merge.
 
 File `.htaccess` (dùng cho Apache/LiteSpeed) sẽ:
 - dùng `404.html` làm trang lỗi,
