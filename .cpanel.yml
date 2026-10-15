@@ -1,0 +1,10 @@
+---
+# Deploy qua cPanel Git Version Control (AZDIGI).
+# Chỉ copy các file của website; không copy .git, .claude, README.md, .cpanel.yml.
+deployment:
+  tasks:
+    - export DEPLOYPATH=/home/umrhcgry/passnhanh.vn/
+    - /bin/mkdir -p $DEPLOYPATH
+    - /bin/cp index.html 404.html dieu-khoan.html quyen-rieng-tu.html $DEPLOYPATH
+    - /bin/cp robots.txt sitemap.xml .htaccess $DEPLOYPATH
+    - /bin/cp -R assets $DEPLOYPATH
