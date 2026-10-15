@@ -73,7 +73,8 @@ add_action( 'wp_enqueue_scripts', function () {
 
 add_action( 'wp_head', function () {
 	if ( ! has_site_icon() ) {
-		echo '<link rel="icon" href="' . esc_url( PN_URI . '/assets/img/favicon.svg' ) . '" type="image/svg+xml">' . "\n";
+		echo '<link rel="icon" href="' . esc_url( PN_URI . '/assets/img/favicon.png' ) . '" type="image/png">' . "\n";
+		echo '<link rel="apple-touch-icon" href="' . esc_url( PN_URI . '/assets/img/apple-touch-icon.png' ) . '">' . "\n";
 	}
 	echo '<meta name="theme-color" content="#00a6a6">' . "\n";
 }, 2 );
