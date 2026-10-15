@@ -79,9 +79,17 @@ jobs:
 
       - name: Verify live site
         run: |
-          expected=$(md5sum index.html | cut -d' ' -f1)
+          # WordPress: so sánh JS của theme; bản HTML tĩnh: so sánh index.html.
+          if curl -sS --max-time 20 "https://passnhanh.vn/" | grep -q '/wp-content/themes/passnhanh/'; then
+            file=wp-theme/passnhanh/assets/js/main.js
+            url="https://passnhanh.vn/wp-content/themes/passnhanh/assets/js/main.js?v=${GITHUB_SHA}"
+          else
+            file=index.html
+            url="https://passnhanh.vn/?v=${GITHUB_SHA}"
+          fi
+          expected=$(md5sum "$file" | cut -d' ' -f1)
           for i in $(seq 1 12); do
-            live=$(curl -sS --max-time 20 -H 'Cache-Control: no-cache' "https://passnhanh.vn/?v=${GITHUB_SHA}" | md5sum | cut -d' ' -f1 || true)
+            live=$(curl -sS --max-time 20 -H 'Cache-Control: no-cache' "$url" | md5sum | cut -d' ' -f1 || true)
             if [ "$live" = "$expected" ]; then
               echo "passnhanh.vn đang chạy đúng commit ${GITHUB_SHA::7}"
               exit 0
@@ -89,5 +97,5 @@ jobs:
             echo "Chưa thấy bản mới (lần $i/12), chờ 10 giây…"
             sleep 10
           done
-          echo "::error::Sau 2 phút, index.html trên passnhanh.vn vẫn khác bản trong repo"
+          echo "::error::Sau 2 phút, $file trên passnhanh.vn vẫn khác bản trong repo"
           exit 1

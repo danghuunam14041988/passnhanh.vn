@@ -18,6 +18,42 @@ assets/img/           Ảnh (đang là ảnh minh họa cắt từ bản thiết
 robots.txt, sitemap.xml
 ```
 
+## WordPress (theme `wp-theme/passnhanh`)
+
+Website đang chuyển sang WordPress. Theme **PassNhanh** giữ nguyên giao diện hiện tại và cho phép quản lý nội dung trong trang quản trị:
+
+- **Tin Pass**: tiêu đề, ảnh đại diện, giá gốc, giá pass, khu vực, hạn (tự ẩn khi hết hạn), nhãn "Cần Pass Gấp", liên kết liên hệ.
+- **Nhu cầu**: hiện ở cột "Nhu cầu đang tìm nhiều".
+- **Danh mục Pass**: 12 danh mục tạo sẵn, mỗi danh mục có biểu tượng emoji, màu và thứ tự.
+- **Bài viết**: mục "Bài viết & Cẩm nang" và trang `/blog/`.
+- **Giao diện → Tùy biến → PassNhanh**: tiêu đề và ảnh đầu trang, ảnh bản đồ, ảnh CTV, địa chỉ web app, email hỗ trợ, bật/tắt nội dung minh họa.
+- **Giao diện → Menu**: menu đầu trang ("Menu chính") và chân trang.
+
+Khi kích hoạt theme lần đầu, theme tự tạo: 12 danh mục, trang Điều khoản, trang Quyền riêng tư, trang chủ tĩnh và trang Blog (không ghi đè thứ đã có). Khi chưa có Tin Pass / Nhu cầu nào, trang chủ hiện nội dung minh họa có nhãn "Tin minh họa".
+
+`.cpanel.yml` tự nhận biết: thư mục website có `wp-config.php` thì chỉ chép theme vào `wp-content/themes/passnhanh/`, chưa có thì chép bản HTML tĩnh như cũ. Vì vậy merge theme vào `main` không làm thay đổi web cho tới khi cài WordPress.
+
+### Các bước chuyển sang WordPress (làm một lần, web gián đoạn khoảng 10 phút)
+
+1. **Sao lưu**: cPanel → File Manager → thư mục `passnhanh.vn` → Compress, tải file nén về máy.
+2. **Dọn thư mục web** `/home/umrhcgry/passnhanh.vn/`: xóa `index.html`, `404.html`, `dieu-khoan.html`, `quyen-rieng-tu.html`, `robots.txt`, `sitemap.xml`, thư mục `assets/`, file `.htaccess` và thư mục `.git` nếu có (bật "Show Hidden Files" để thấy file ẩn).
+3. **Cài WordPress**: cPanel → WordPress Manager by Softaculous → Install. Chọn `https://passnhanh.vn`, để trống ô thư mục (cài vào gốc), ngôn ngữ Tiếng Việt, tự đặt tài khoản quản trị và mật khẩu mạnh.
+4. **Chép theme**: cPanel → Git Version Control → Manage → Pull or Deploy → **Update from Remote** → **Deploy HEAD Commit** (hoặc để GitHub Actions tự chạy).
+5. **Kích hoạt theme**: vào `https://passnhanh.vn/wp-admin` → Giao diện → Giao diện → **PassNhanh** → Kích hoạt.
+6. **Đường dẫn đẹp**: Cài đặt → Đường dẫn tĩnh → chọn "Tên bài viết" → Lưu thay đổi.
+7. **Ảnh thật**: Giao diện → Tùy biến → PassNhanh → thay ảnh đầu trang, bản đồ, CTV.
+8. **Nội dung**: thêm Tin Pass, Nhu cầu, bài viết. Tin minh họa tự ẩn khi có tin thật.
+
+Sau khi chuyển, mỗi lần sửa theme chỉ cần merge vào `main` và deploy; WordPress tự nhận CSS/JS mới (phiên bản theo thời điểm sửa file).
+
+### Chạy thử theme trên máy
+
+```bash
+npx @wp-playground/cli@3.1.58 server --port=9400 --mount-dir wp-theme/passnhanh /wordpress/wp-content/themes/passnhanh
+```
+
+Mở http://127.0.0.1:9400/wp-admin → Giao diện → kích hoạt PassNhanh. (Trên Git Bash của Windows, thêm `MSYS_NO_PATHCONV=1` trước lệnh.)
+
 ## Chạy local
 
 ```bash
