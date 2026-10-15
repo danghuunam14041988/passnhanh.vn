@@ -18,7 +18,7 @@
 			<?php
 			$logo_id = get_theme_mod( 'custom_logo' );
 			if ( $logo_id ) {
-				echo wp_get_attachment_image( $logo_id, 'full', false, array( 'alt' => get_bloginfo( 'name' ) ) );
+				echo wp_get_attachment_image( $logo_id, 'full', false, array( 'alt' => get_bloginfo( 'name' ), 'class' => 'custom-logo' ) );
 			} else {
 				pn_brand_markup();
 			}
