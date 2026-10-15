@@ -12,14 +12,16 @@ dieu-khoan.html       Điều khoản sử dụng (bản nháp)
 quyen-rieng-tu.html   Chính sách quyền riêng tư (bản nháp)
 404.html              Trang lỗi
 assets/styles.css     Giao diện
-assets/main.js        Menu mobile, tabs, link sang app
+assets/main.js        Menu mobile, tìm kiếm, lọc tin, link sang app
+assets/img/           Ảnh (đang là ảnh minh họa cắt từ bản thiết kế)
+.github/workflows/    Tự động deploy lên AZDIGI
 robots.txt, sitemap.xml
 ```
 
 ## Chạy local
 
 ```bash
-python -m http.server 8765
+python .claude/serve.py
 ```
 
 Mở http://localhost:8765
@@ -31,11 +33,40 @@ Mở http://localhost:8765
 
 ## Triển khai
 
-Website triển khai lên hosting AZDIGI (cPanel) qua **Git Version Control**, lấy từ nhánh `main`:
+Website triển khai lên hosting AZDIGI (cPanel) qua **Git Version Control**, lấy từ nhánh `main`.
 
-1. cPanel kéo repo về, rồi bấm **Deploy HEAD Commit**.
-2. cPanel chạy các lệnh trong `.cpanel.yml`, copy file website vào `/home/umrhcgry/passnhanh.vn/` (document root của `passnhanh.vn`).
-3. Chỉ các file của website được copy; `.git`, `.claude`, `README.md`, `.cpanel.yml` ở lại trong kho của cPanel.
+### Tự động (GitHub Actions)
+
+Mỗi lần nhánh `main` có commit mới, workflow `.github/workflows/deploy.yml` tự chạy:
+
+1. Gọi API cPanel để kho trong Git Version Control kéo code mới nhất của `main`.
+2. Gọi API cPanel để deploy: chạy `.cpanel.yml`, copy file website vào `/home/umrhcgry/passnhanh.vn/` (document root của `passnhanh.vn`).
+3. Kiểm tra `https://passnhanh.vn` đã chạy đúng `index.html` của commit vừa đẩy.
+
+Xem kết quả ở tab **Actions** trên GitHub. Có thể chạy lại bằng tay: Actions → *Deploy to AZDIGI* → **Run workflow**.
+
+Thiết lập một lần:
+
+1. Trong cPanel → **Git Version Control**: đã có kho clone từ `https://github.com/danghuunam14041988/passnhanh.vn.git`, nhánh `main`. Ghi lại đường dẫn kho (Repository Path), ví dụ `/home/umrhcgry/repositories/passnhanh.vn`.
+2. Trong cPanel → **Security → Manage API Tokens**: tạo token mới (ví dụ tên `github-deploy`), copy token.
+3. Trên GitHub → repo → **Settings → Secrets and variables → Actions → New repository secret**, tạo 4 secret:
+
+   | Tên | Giá trị |
+   | --- | --- |
+   | `CPANEL_HOST` | tên máy chủ cPanel, ví dụ `abc123.azdigihost.com` (xem ở thanh địa chỉ khi đăng nhập cPanel, bỏ `https://` và `:2083`) |
+   | `CPANEL_USER` | `umrhcgry` |
+   | `CPANEL_TOKEN` | token vừa tạo ở bước 2 |
+   | `CPANEL_REPO_ROOT` | đường dẫn kho ở bước 1 |
+
+Token cPanel có toàn quyền trên tài khoản hosting: chỉ lưu trong GitHub Secrets, không dán vào code hay chat. Nếu lộ, xóa token trong cPanel và tạo token mới.
+
+### Bằng tay (khi cần)
+
+cPanel → Git Version Control → **Manage** → **Pull or Deploy** → **Update from Remote** → **Deploy HEAD Commit**.
+
+### Lưu ý
+
+Chỉ các file của website được copy; `.git`, `.github`, `.claude`, `README.md`, `.cpanel.yml` ở lại trong kho của cPanel.
 
 Khi thêm file hoặc trang mới ở gốc repo, nhớ thêm tên file vào `.cpanel.yml`. File bị xóa khỏi repo sẽ không tự xóa trên hosting.
 
