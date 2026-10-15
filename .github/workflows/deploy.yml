@@ -1,0 +1,93 @@
+# Tự động deploy lên hosting AZDIGI (cPanel) mỗi khi nhánh main có commit mới.
+# GitHub gọi API của cPanel: kéo code mới về kho Git Version Control, rồi chạy .cpanel.yml.
+#
+# Cần tạo 4 secret trong GitHub (Settings → Secrets and variables → Actions):
+#   CPANEL_HOST       tên máy chủ cPanel, ví dụ abc123.azdigihost.com (không có https://, không có :2083)
+#   CPANEL_USER       tên đăng nhập cPanel, ví dụ umrhcgry
+#   CPANEL_TOKEN      API token tạo trong cPanel → Security → Manage API Tokens
+#   CPANEL_REPO_ROOT  đường dẫn kho trong Git Version Control, ví dụ /home/umrhcgry/repositories/passnhanh.vn
+
+name: Deploy to AZDIGI
+
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+concurrency:
+  group: deploy-production
+  cancel-in-progress: false
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Check secrets
+        env:
+          CPANEL_HOST: ${{ secrets.CPANEL_HOST }}
+          CPANEL_USER: ${{ secrets.CPANEL_USER }}
+          CPANEL_TOKEN: ${{ secrets.CPANEL_TOKEN }}
+          CPANEL_REPO_ROOT: ${{ secrets.CPANEL_REPO_ROOT }}
+        run: |
+          missing=""
+          for v in CPANEL_HOST CPANEL_USER CPANEL_TOKEN CPANEL_REPO_ROOT; do
+            [ -n "${!v}" ] || missing="$missing $v"
+          done
+          if [ -n "$missing" ]; then
+            echo "::error::Thiếu secret:$missing. Xem hướng dẫn ở đầu file .github/workflows/deploy.yml"
+            exit 1
+          fi
+
+      - name: Pull from GitHub and deploy on cPanel
+        env:
+          CPANEL_HOST: ${{ secrets.CPANEL_HOST }}
+          CPANEL_USER: ${{ secrets.CPANEL_USER }}
+          CPANEL_TOKEN: ${{ secrets.CPANEL_TOKEN }}
+          CPANEL_REPO_ROOT: ${{ secrets.CPANEL_REPO_ROOT }}
+        run: |
+          set -euo pipefail
+
+          # Gọi một hàm UAPI của cPanel; dừng lại nếu cPanel báo lỗi.
+          uapi() {
+            local fn="$1"; shift
+            local out
+            out=$(curl -sS --fail-with-body --max-time 120 -G \
+              -H "Authorization: cpanel ${CPANEL_USER}:${CPANEL_TOKEN}" \
+              "https://${CPANEL_HOST}:2083/execute/${fn}" "$@")
+            echo "$out" | python3 -c '
+          import json, sys
+          d = json.load(sys.stdin)
+          if d.get("status") != 1:
+              print("cPanel báo lỗi:", "; ".join(d.get("errors") or ["không rõ"]))
+              sys.exit(1)
+          print("OK")
+          '
+          }
+
+          echo "1/2 Kéo code mới nhất của main về kho trên cPanel"
+          uapi VersionControl/update \
+            --data-urlencode "repository_root=${CPANEL_REPO_ROOT}" \
+            --data-urlencode "branch=main"
+
+          echo "2/2 Chạy .cpanel.yml để copy file vào thư mục website"
+          uapi VersionControlDeployment/create \
+            --data-urlencode "repository_root=${CPANEL_REPO_ROOT}"
+
+      - name: Verify live site
+        run: |
+          expected=$(md5sum index.html | cut -d' ' -f1)
+          for i in $(seq 1 12); do
+            live=$(curl -sS --max-time 20 -H 'Cache-Control: no-cache' "https://passnhanh.vn/?v=${GITHUB_SHA}" | md5sum | cut -d' ' -f1 || true)
+            if [ "$live" = "$expected" ]; then
+              echo "passnhanh.vn đang chạy đúng commit ${GITHUB_SHA::7}"
+              exit 0
+            fi
+            echo "Chưa thấy bản mới (lần $i/12), chờ 10 giây…"
+            sleep 10
+          done
+          echo "::error::Sau 2 phút, index.html trên passnhanh.vn vẫn khác bản trong repo"
+          exit 1
