@@ -31,7 +31,13 @@ Mở http://localhost:8765
 
 ## Triển khai
 
-Website tĩnh, có thể đưa lên GitHub Pages, Cloudflare Pages, Netlify hoặc bất kỳ hosting tĩnh nào. Với GitHub Pages + domain riêng, thêm file `CNAME` chứa `passnhanh.vn` và trỏ DNS theo hướng dẫn của GitHub.
+Website đang được kết nối từ GitHub về hosting AZDIGI. Mọi thay đổi merge vào nhánh deploy sẽ lên web thật, nên hãy review kỹ trước khi merge.
+
+File `.htaccess` (dùng cho Apache/LiteSpeed) sẽ:
+- dùng `404.html` làm trang lỗi,
+- tắt liệt kê thư mục,
+- chặn truy cập `.git`, `.claude`, `README.md` nếu repo được clone thẳng vào `public_html`,
+- bật cache và nén cho CSS/JS/SVG.
 
 ## Trước khi ra mắt
 

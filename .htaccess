@@ -1,0 +1,20 @@
+# Cấu hình cho hosting Apache/LiteSpeed (AZDIGI, cPanel, DirectAdmin)
+
+ErrorDocument 404 /404.html
+Options -Indexes
+
+# Không cho truy cập thư mục/file ẩn (.git, .claude, .htaccess...) và file chỉ dùng cho repo
+RedirectMatch 404 /\.(?!well-known/)
+RedirectMatch 404 ^/README\.md$
+
+<IfModule mod_headers.c>
+  Header always set X-Content-Type-Options "nosniff"
+  Header always set Referrer-Policy "strict-origin-when-cross-origin"
+  <FilesMatch "\.(css|js|svg)$">
+    Header set Cache-Control "public, max-age=604800"
+  </FilesMatch>
+</IfModule>
+
+<IfModule mod_deflate.c>
+  AddOutputFilterByType DEFLATE text/html text/css application/javascript image/svg+xml text/plain application/xml
+</IfModule>
