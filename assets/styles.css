@@ -101,9 +101,10 @@ button { font-family: inherit; }
   position: relative; overflow: hidden; border-radius: 20px; min-height: 330px;
   padding: 26px 28px 20px; display: flex; flex-direction: column; justify-content: space-between; gap: 18px;
   background:
-    linear-gradient(90deg, #f9d7b8 0%, #f6dcc4 30%, rgba(246, 220, 196, .85) 45%, rgba(246, 220, 196, 0) 62%),
-    url("img/hero.webp") right center / auto 100% no-repeat,
-    linear-gradient(180deg, #f6d4b4, #9fc4c6);
+    linear-gradient(90deg, #241d1a 0%, #2c2420 36%, rgba(44, 36, 32, .85) 46%, rgba(44, 36, 32, 0) 60%),
+    linear-gradient(180deg, rgba(44, 36, 32, 0) 55%, #2c2420 80%),
+    url("img/hero.webp?v=2") right top / auto 80% no-repeat,
+    #2c2420;
 }
 .hero::after {
   content: ""; position: absolute; inset: auto 0 0 0; height: 45%;
@@ -111,10 +112,10 @@ button { font-family: inherit; }
   pointer-events: none;
 }
 .hero > * { position: relative; z-index: 1; }
-.hero h1 { font-size: clamp(28px, 3vw, 40px); font-style: italic; font-weight: 900; letter-spacing: -0.5px; color: var(--navy); }
+.hero h1 { font-size: clamp(28px, 3vw, 40px); font-style: italic; font-weight: 900; letter-spacing: -0.5px; color: #fff; text-shadow: 0 2px 12px rgba(0, 0, 0, .25); }
 .hero h1 span { color: var(--orange); }
 .hero-text .sep { display: none; }
-.hero-text p { margin-top: 10px; color: var(--navy); font-size: 15px; font-weight: 500; }
+.hero-text p { margin-top: 10px; color: rgba(255, 255, 255, .92); font-size: 15px; font-weight: 500; }
 
 .search-box { max-width: 760px; }
 .search-tabs { display: flex; gap: 4px; }
@@ -319,8 +320,8 @@ button { font-family: inherit; }
   .brand img { height: 36px; }
   .top-grid { grid-template-columns: minmax(0, 1fr); }
   .hero { padding: 20px 16px 16px; min-height: 0; background:
-    linear-gradient(180deg, rgba(249, 215, 184, .95) 0%, rgba(246, 220, 196, .75) 40%, rgba(246, 220, 196, .2) 70%),
-    url("img/hero.webp") 70% center / cover no-repeat; }
+    linear-gradient(180deg, rgba(36, 29, 26, .92) 0%, rgba(36, 29, 26, .7) 45%, rgba(36, 29, 26, .35) 75%),
+    url("img/hero.webp?v=2") 70% center / cover no-repeat; }
   .hero-text p br { display: none; }
   .hero-text .sep { display: inline; }
   .search-tab { flex: 1; justify-content: center; padding: 10px 8px; }
