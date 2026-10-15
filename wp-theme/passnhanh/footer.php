@@ -12,7 +12,7 @@ $pn_extra    = pn_menu_links( 'footer' );
 	<div class="container">
 		<div class="footer-grid">
 			<div>
-				<img src="<?php echo esc_url( pn_img( 'logo.webp' ) ); ?>" alt="PassNhanh" width="184" height="42" class="footer-logo">
+				<a class="brand" href="<?php echo esc_url( home_url( '/' ) ); ?>" aria-label="PassNhanh.vn — Trang chủ"><?php pn_brand_markup(); ?></a>
 				<p><?php echo esc_html( get_bloginfo( 'description' ) ? get_bloginfo( 'description' ) : 'Chợ pass thông minh — kết nối người cần pass với người đang cần.' ); ?></p>
 			</div>
 			<div>

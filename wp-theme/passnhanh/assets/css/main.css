@@ -66,7 +66,7 @@ button { font-family: inherit; }
   border-bottom: 1px solid var(--line);
 }
 .site-header .container { display: flex; align-items: center; gap: 20px; height: 68px; }
-.brand img { height: 42px; width: auto; }
+.brand > img:not(.brand-mark) { height: 42px; width: auto; }
 .logo { font-size: 25px; font-weight: 900; letter-spacing: -1.2px; color: var(--teal); text-decoration: none; white-space: nowrap; }
 .logo b { color: var(--orange); }
 .logo small { font-size: 11px; color: #7b929e; letter-spacing: 0; font-weight: 700; }
@@ -317,7 +317,7 @@ button { font-family: inherit; }
   .container { padding: 0 16px; }
   .page { gap: 12px; padding-top: 12px; }
   .city-select { display: none; }
-  .brand img { height: 36px; }
+  .brand > img:not(.brand-mark) { height: 36px; }
   .top-grid { grid-template-columns: minmax(0, 1fr); }
   .hero { padding: 20px 16px 16px; min-height: 0; background:
     linear-gradient(180deg, rgba(36, 29, 26, .92) 0%, rgba(36, 29, 26, .7) 45%, rgba(36, 29, 26, .35) 75%),
@@ -417,3 +417,22 @@ button { font-family: inherit; }
 }
 .l-ph { position: absolute; inset: 0; display: grid; place-items: center; font-size: 40px; }
 .ld-media .l-ph { font-size: 96px; }
+
+/* Logo */
+.brand { display: inline-flex; align-items: center; gap: 6px; text-decoration: none; flex: none; }
+.brand-mark { width: 44px; height: 44px; flex: none; }
+.brand-text { display: flex; flex-direction: column; line-height: 1; }
+.brand-name { font-size: 27px; font-weight: 900; font-style: italic; letter-spacing: -0.6px; color: #0f3346; white-space: nowrap; }
+.brand-name b { font-weight: 900; color: #f26a12; }
+.brand-tag { font-size: 7.8px; font-weight: 700; letter-spacing: 0.8px; color: #0f3346; text-transform: uppercase; margin-top: 3px; padding-left: 2px; white-space: nowrap; }
+.site-footer .brand { background: #fff; border-radius: 12px; padding: 8px 14px 8px 8px; margin-bottom: 12px; }
+@media (max-width: 640px) {
+  .brand-mark { width: 36px; height: 36px; }
+  .brand-name { font-size: 22px; }
+  .brand-tag { font-size: 6.4px; letter-spacing: 0.6px; }
+  .site-header .container { gap: 10px; }
+}
+@media (max-width: 420px) {
+  .site-header .brand-tag { display: none; }
+  .header-tools { gap: 4px; }
+}

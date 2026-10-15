@@ -311,3 +311,9 @@ function pn_page_url( $slug ) {
 	$page = get_page_by_path( $slug );
 	return $page ? get_permalink( $page ) : '';
 }
+
+/** Logo: biểu tượng SVG + chữ PassNhanh (nét ở mọi kích thước). */
+function pn_brand_markup() {
+	echo '<img class="brand-mark" src="' . esc_url( pn_img( 'logo-mark.svg' ) ) . '" alt="" width="44" height="44">';
+	echo '<span class="brand-text"><span class="brand-name">Pass<b>Nhanh</b></span><span class="brand-tag">Đăng nhanh · Tìm nhanh · Chốt nhanh</span></span>';
+}

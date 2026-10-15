@@ -20,7 +20,7 @@
 			if ( $logo_id ) {
 				echo wp_get_attachment_image( $logo_id, 'full', false, array( 'alt' => get_bloginfo( 'name' ) ) );
 			} else {
-				echo '<img src="' . esc_url( pn_img( 'logo.webp' ) ) . '" alt="PassNhanh — Đăng nhanh, tìm nhanh, chốt nhanh" width="184" height="42">';
+				pn_brand_markup();
 			}
 			?>
 		</a>
