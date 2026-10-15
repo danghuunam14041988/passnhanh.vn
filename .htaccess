@@ -3,6 +3,12 @@
 ErrorDocument 404 /404.html
 Options -Indexes
 
+# Tự chuyển HTTP sang HTTPS (trừ đường dẫn xác thực SSL)
+RewriteEngine On
+RewriteCond %{HTTPS} !=on
+RewriteCond %{REQUEST_URI} !^/\.well-known/
+RewriteRule ^ https://%{HTTP_HOST}%{REQUEST_URI} [L,R=301]
+
 # Không cho truy cập thư mục/file ẩn (.git, .claude, .htaccess...) và file chỉ dùng cho repo
 RedirectMatch 404 /\.(?!well-known/)
 RedirectMatch 404 ^/README\.md$
