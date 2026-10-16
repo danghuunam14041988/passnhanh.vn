@@ -122,12 +122,14 @@ function pn_setup_blog() {
 
 	// Đường dẫn bài viết dạng /blog/ten-bai/. Chỉ đổi khi blog còn mới (chưa quá 1 bài, tức chỉ có bài mẫu),
 	// để không làm hỏng đường dẫn của bài đã đăng.
+	// Dùng $wp_rewrite để quy tắc mới có hiệu lực ngay khi flush ở cuối hàm.
+	global $wp_rewrite;
 	$published = (int) wp_count_posts( 'post' )->publish;
 	if ( '/%postname%/' !== get_option( 'permalink_structure' ) && $published <= 1 ) {
-		update_option( 'permalink_structure', '/%postname%/' );
+		$wp_rewrite->set_permalink_structure( '/%postname%/' );
 	}
 	if ( '' === (string) get_option( 'category_base' ) ) {
-		update_option( 'category_base', 'chuyen-muc' );
+		$wp_rewrite->set_category_base( 'chuyen-muc' );
 	}
 	if ( ! get_option( 'blogdescription' ) || 'Just another WordPress site' === get_option( 'blogdescription' ) ) {
 		update_option( 'blogdescription', 'Kinh nghiệm pass đồ, săn deal và giao dịch an toàn' );
