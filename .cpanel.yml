@@ -2,10 +2,13 @@
 # Deploy qua cPanel Git Version Control (AZDIGI).
 # - Thư mục website đã cài WordPress (có wp-config.php): chỉ chép theme vào wp-content/themes/passnhanh.
 # - Chưa cài WordPress: chép bản HTML tĩnh như trước.
+# - Blog WordPress ở passnhanh.vn/blog (có blog/wp-config.php): chép theme vào blog/wp-content/themes/passnhanh.
 # Không chép .git, .github, .claude, README.md, .cpanel.yml.
 deployment:
   tasks:
     - export DEPLOYPATH=/home/umrhcgry/passnhanh.vn/
     - export THEMEPATH=${DEPLOYPATH}wp-content/themes/passnhanh/
+    - export BLOGTHEMEPATH=${DEPLOYPATH}blog/wp-content/themes/passnhanh/
     - if [ -f "${DEPLOYPATH}wp-config.php" ]; then /bin/mkdir -p "$THEMEPATH" && /bin/cp -R wp-theme/passnhanh/. "$THEMEPATH"; fi
     - if [ ! -f "${DEPLOYPATH}wp-config.php" ]; then /bin/mkdir -p "$DEPLOYPATH" && /bin/cp index.html 404.html dieu-khoan.html quyen-rieng-tu.html robots.txt sitemap.xml .htaccess "$DEPLOYPATH" && /bin/cp -R assets "$DEPLOYPATH"; fi
+    - if [ -f "${DEPLOYPATH}blog/wp-config.php" ]; then /bin/mkdir -p "$BLOGTHEMEPATH" && /bin/cp -R wp-theme/passnhanh/. "$BLOGTHEMEPATH"; fi

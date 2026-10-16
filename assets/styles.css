@@ -358,3 +358,5 @@ button { font-family: inherit; }
   .site-header .brand-logo { height: 32px; }
   .header-tools { gap: 4px; }
 }
+.blog-item { text-decoration: none; display: block; }
+.blog-item:hover h3 { color: var(--teal-dark); }

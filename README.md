@@ -46,6 +46,23 @@ Khi kích hoạt theme lần đầu, theme tự tạo: 12 danh mục, trang Đi�
 
 Sau khi chuyển, mỗi lần sửa theme chỉ cần merge vào `main` và deploy; WordPress tự nhận CSS/JS mới (phiên bản theo thời điểm sửa file).
 
+### Blog WordPress tại passnhanh.vn/blog (đang dùng)
+
+Trang chủ vẫn là HTML tĩnh; riêng Blog chạy WordPress cài trong thư mục con `blog`. Theme PassNhanh tự nhận "chế độ Blog" khi địa chỉ WordPress có đường dẫn con: trang `/blog/` hiện danh sách bài viết, menu và logo trỏ về `https://passnhanh.vn`, không tạo Tin Pass/Nhu cầu/Danh mục.
+
+Cài một lần:
+
+1. cPanel → **WordPress Manager by Softaculous** → **Install**. Chọn `https://passnhanh.vn`, ô thư mục (In Directory) ghi `blog`, ngôn ngữ **Tiếng Việt**, tự đặt tài khoản quản trị và mật khẩu mạnh (không dùng tên `admin`).
+2. cPanel → **Git Version Control** → Manage → Pull or Deploy → **Update from Remote** → **Deploy HEAD Commit** (`.cpanel.yml` thấy `blog/wp-config.php` nên chép theme vào `blog/wp-content/themes/passnhanh/`).
+3. Vào `https://passnhanh.vn/blog/wp-admin` → Giao diện → Giao diện → **PassNhanh** → Kích hoạt. Theme tự tạo 7 chuyên mục (Cách pass nhanh, Kinh nghiệm mua pass, Chuyển nhượng đặt phòng, Kiểm tra voucher, Giao dịch an toàn, Hướng dẫn đăng tin, Hướng dẫn cộng tác viên), đặt đường dẫn bài viết dạng `/blog/ten-bai/`, chuyên mục dạng `/blog/chuyen-muc/ten-chuyen-muc/`.
+4. Xóa bài mẫu "Hello world!" và trang mẫu của WordPress.
+
+Đăng bài: Bài viết → Viết bài mới → nhập tiêu đề, nội dung, **Tóm tắt** (dùng làm mô tả trên Google, ~150 ký tự), **Ảnh đại diện** (ngang, ≥ 1200×630), chọn chuyên mục → Đăng.
+
+SEO có sẵn trong theme: thẻ mô tả, canonical, Open Graph, dữ liệu có cấu trúc `BlogPosting` + `BreadcrumbList` + `Organization`, sitemap `/blog/wp-sitemap.xml` (đã khai báo trong `robots.txt`), trang tìm kiếm `noindex`, ẩn trang tác giả và danh sách tài khoản. Nếu sau này cài plugin SEO (Yoast, Rank Math…) theme tự tắt phần thẻ meta để không trùng.
+
+Trang chủ HTML tự lấy 4 bài mới nhất từ `/blog/wp-json/` để hiện ở mục "Bài viết & Cẩm nang".
+
 ### Chạy thử theme trên máy
 
 ```bash
