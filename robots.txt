@@ -2,4 +2,4 @@ User-agent: *
 Allow: /
 
 Sitemap: https://passnhanh.vn/sitemap.xml
-Sitemap: https://passnhanh.vn/blog/wp-sitemap.xml
+Sitemap: https://passnhanh.vn/blog/sitemap_index.xml
