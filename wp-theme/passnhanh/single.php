@@ -27,7 +27,7 @@ while ( have_posts() ) :
 			<?php if ( $modified !== $published ) : ?> · Cập nhật <time datetime="<?php echo esc_attr( get_the_modified_date( 'c' ) ); ?>"><?php echo esc_html( $modified ); ?></time><?php endif; ?>
 			<?php if ( get_the_author() ) : ?> · <?php echo esc_html( get_the_author() ); ?><?php endif; ?>
 		</p>
-		<?php if ( has_post_thumbnail() ) : ?>
+		<?php if ( has_post_thumbnail() && ! pn_content_has_thumbnail() ) : ?>
 			<div class="doc-thumb"><?php the_post_thumbnail( 'large' ); ?></div>
 		<?php endif; ?>
 		<div class="entry-content"><?php the_content(); ?></div>
