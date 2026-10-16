@@ -14,7 +14,7 @@
 
 <header class="site-header" id="top">
 	<div class="container header-row">
-		<a class="brand" href="<?php echo esc_url( home_url( '/' ) ); ?>" aria-label="<?php echo esc_attr( get_bloginfo( 'name' ) ); ?> — Trang chủ">
+		<a class="brand" href="<?php echo esc_url( pn_main_url( '/' ) ); ?>" aria-label="PassNhanh.vn — Trang chủ">
 			<?php
 			$logo_id = get_theme_mod( 'custom_logo' );
 			if ( $logo_id ) {
@@ -34,7 +34,8 @@
 			</div>
 		</nav>
 		<div class="header-tools">
-			<form class="city-select" action="<?php echo esc_url( get_post_type_archive_link( 'tin_pass' ) ); ?>" method="get">
+			<?php if ( ! pn_is_blog_install() ) : ?>
+			<form class="city-select" action="<?php echo esc_url( pn_listings_url() ); ?>" method="get">
 				<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 22s7-6.2 7-12a7 7 0 1 0-14 0c0 5.8 7 12 7 12z"/><circle cx="12" cy="10" r="2.5" fill="#fff"/></svg>
 				<label class="sr-only" for="citySelect">Khu vực</label>
 				<?php $current_city = isset( $_GET['khu_vuc'] ) ? sanitize_text_field( wp_unslash( $_GET['khu_vuc'] ) ) : 'Hà Nội'; ?>
@@ -44,7 +45,8 @@
 					<?php endforeach; ?>
 				</select>
 			</form>
-			<a class="icon-btn" href="<?php echo esc_url( home_url( '/#tim-kiem' ) ); ?>" aria-label="Tìm kiếm"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="11" cy="11" r="7"/><path d="m20 20-4-4"/></svg></a>
+			<?php endif; ?>
+			<a class="icon-btn" href="<?php echo esc_url( pn_is_blog_install() ? home_url( '/#tim-bai' ) : home_url( '/#tim-kiem' ) ); ?>" aria-label="Tìm kiếm"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="11" cy="11" r="7"/><path d="m20 20-4-4"/></svg></a>
 			<a class="icon-btn" href="<?php echo esc_url( pn_app_url() ); ?>" aria-label="Thông báo"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6 16V11a6 6 0 1 1 12 0v5l2 2H4z"/><path d="M10 20a2 2 0 0 0 4 0"/></svg></a>
 			<a class="btn btn-outline hide-md" href="<?php echo esc_url( pn_app_url() ); ?>">Đăng nhập</a>
 			<a class="btn btn-primary hide-md" href="<?php echo esc_url( pn_app_url() ); ?>">Đăng ký</a>

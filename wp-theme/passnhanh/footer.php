@@ -12,22 +12,22 @@ $pn_extra    = pn_menu_links( 'footer' );
 	<div class="container">
 		<div class="footer-grid">
 			<div>
-				<a class="brand" href="<?php echo esc_url( home_url( '/' ) ); ?>" aria-label="PassNhanh.vn — Trang chủ"><?php pn_brand_markup(); ?></a>
+				<a class="brand" href="<?php echo esc_url( pn_main_url( '/' ) ); ?>" aria-label="PassNhanh.vn — Trang chủ"><?php pn_brand_markup(); ?></a>
 				<p><?php echo esc_html( get_bloginfo( 'description' ) ? get_bloginfo( 'description' ) : 'Chợ pass thông minh — kết nối người cần pass với người đang cần.' ); ?></p>
 			</div>
 			<div>
 				<h4>Sản phẩm</h4>
 				<ul>
-					<li><a href="<?php echo esc_url( get_post_type_archive_link( 'tin_pass' ) ); ?>">Tìm Pass</a></li>
+					<li><a href="<?php echo esc_url( pn_listings_url() ); ?>">Tìm Pass</a></li>
 					<li><a href="<?php echo esc_url( pn_app_url() ); ?>">Đăng Pass</a></li>
-					<li><a href="<?php echo esc_url( home_url( '/#ctv' ) ); ?>">Cộng tác viên</a></li>
+					<li><a href="<?php echo esc_url( pn_main_url( '/#ctv' ) ); ?>">Cộng tác viên</a></li>
 					<li><a href="<?php echo esc_url( pn_blog_url() ); ?>">Blog</a></li>
 				</ul>
 			</div>
 			<div>
 				<h4>Hỗ trợ</h4>
 				<ul>
-					<li><a href="<?php echo esc_url( home_url( '/#ho-tro' ) ); ?>">Hỏi đáp</a></li>
+					<li><a href="<?php echo esc_url( pn_main_url( '/#ho-tro' ) ); ?>">Hỏi đáp</a></li>
 					<li><a href="mailto:<?php echo esc_attr( $pn_email ); ?>"><?php echo esc_html( $pn_email ); ?></a></li>
 					<?php foreach ( $pn_extra as $link ) : ?>
 						<li><a href="<?php echo esc_url( $link['url'] ); ?>"><?php echo esc_html( $link['title'] ); ?></a></li>

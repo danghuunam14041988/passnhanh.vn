@@ -149,3 +149,47 @@ renderListings();
 
 const year = document.getElementById('year');
 if (year) year.textContent = new Date().getFullYear();
+
+// Mục "Bài viết & Cẩm nang": lấy 4 bài mới nhất từ WordPress ở /blog (nếu đã có bài).
+(function loadBlogPosts() {
+  const grid = document.getElementById('blogGrid');
+  const more = document.getElementById('blogMore');
+  if (!grid || !window.fetch) return;
+  fetch('/blog/wp-json/wp/v2/posts?per_page=4&_embed=wp:featuredmedia', { headers: { Accept: 'application/json' } })
+    .then((r) => (r.ok ? r.json() : []))
+    .then((posts) => {
+      if (!Array.isArray(posts) || !posts.length) return;
+      const text = (html) => {
+        const el = document.createElement('div');
+        el.innerHTML = html;
+        return el.textContent.trim();
+      };
+      grid.textContent = '';
+      posts.forEach((p) => {
+        const media = p._embedded && p._embedded['wp:featuredmedia'] && p._embedded['wp:featuredmedia'][0];
+        const sizes = media && media.media_details && media.media_details.sizes;
+        const src = (sizes && (sizes['pn-blog'] || sizes.medium || sizes.full) || {}).source_url || (media && media.source_url) || 'assets/img/blog-halong.webp';
+        const a = document.createElement('a');
+        a.href = p.link;
+        a.className = 'blog-item';
+        const img = document.createElement('img');
+        img.src = src;
+        img.alt = '';
+        img.loading = 'lazy';
+        const h3 = document.createElement('h3');
+        h3.textContent = text(p.title.rendered);
+        a.append(img, h3);
+        const art = document.createElement('article');
+        art.append(a);
+        grid.append(art);
+      });
+      if (more) {
+        const link = document.createElement('a');
+        link.className = 'see-all';
+        link.href = '/blog/';
+        link.textContent = 'Xem tất cả →';
+        more.replaceWith(link);
+      }
+    })
+    .catch(() => {});
+})();

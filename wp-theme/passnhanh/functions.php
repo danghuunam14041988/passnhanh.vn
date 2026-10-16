@@ -112,3 +112,10 @@ add_action( 'pre_get_posts', function ( $q ) {
 	$q->set( 'meta_query', $meta_query );
 	$q->set( 'posts_per_page', 20 );
 } );
+
+// Chế độ Blog: trang /blog/ hiện danh sách bài viết, không dùng giao diện trang chủ chợ Pass.
+add_filter( 'frontpage_template_hierarchy', function ( $templates ) {
+	return pn_is_blog_install() ? array() : $templates;
+} );
+
+require PN_DIR . '/inc/seo.php';

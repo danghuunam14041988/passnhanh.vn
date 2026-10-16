@@ -20,6 +20,11 @@ const PN_COLORS = array(
 add_action( 'init', 'pn_register_types' );
 
 function pn_register_types() {
+	// Chế độ Blog: chỉ dùng bài viết, Tin Pass/Nhu cầu/Danh mục nằm ở web chính.
+	if ( pn_is_blog_install() ) {
+		return;
+	}
+
 	register_post_type(
 		'tin_pass',
 		array(

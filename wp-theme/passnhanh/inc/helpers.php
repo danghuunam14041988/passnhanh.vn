@@ -264,8 +264,43 @@ function pn_get_blog_posts( $count = 4 ) {
 	return $items;
 }
 
+/**
+ * Chế độ Blog: WordPress chỉ cài cho passnhanh.vn/blog, trang chủ chính vẫn là web khác.
+ * Tự bật khi địa chỉ WordPress có đường dẫn con (ví dụ /blog), hoặc khi đặt option pn_blog_mode.
+ */
+function pn_is_blog_install() {
+	static $mode = null;
+	if ( null === $mode ) {
+		$path = (string) wp_parse_url( home_url(), PHP_URL_PATH );
+		$mode = (bool) apply_filters( 'pn_blog_mode', '' !== trim( $path, '/' ) || (bool) get_option( 'pn_blog_mode' ) );
+	}
+	return $mode;
+}
+
+/** Địa chỉ trên trang chủ chính passnhanh.vn (ở chế độ Blog là tên miền gốc, không phải /blog). */
+function pn_main_url( $path = '/' ) {
+	if ( ! pn_is_blog_install() ) {
+		return home_url( $path );
+	}
+	$parts = wp_parse_url( home_url() );
+	$port  = isset( $parts['port'] ) ? ':' . $parts['port'] : '';
+	return $parts['scheme'] . '://' . $parts['host'] . $port . $path;
+}
+
+/** Trang danh sách Tin Pass (ở chế độ Blog thì dẫn sang web app). */
+function pn_listings_url() {
+	if ( pn_is_blog_install() ) {
+		return pn_app_url();
+	}
+	$link = get_post_type_archive_link( 'tin_pass' );
+	return $link ? $link : pn_app_url();
+}
+
 /** Trang danh sách bài viết (Blog). */
 function pn_blog_url() {
+	if ( pn_is_blog_install() ) {
+		return home_url( '/' );
+	}
 	$page = (int) get_option( 'page_for_posts' );
 	return $page ? get_permalink( $page ) : home_url( '/#blog' );
 }
@@ -295,19 +330,24 @@ function pn_menu_links( $location ) {
 	if ( 'footer' === $location ) {
 		return array();
 	}
+	$blog_mode = pn_is_blog_install();
 	return array(
-		array( 'title' => 'Trang chủ', 'url' => home_url( '/' ), 'current' => is_front_page() ),
-		array( 'title' => 'Tìm Pass', 'url' => get_post_type_archive_link( 'tin_pass' ), 'current' => is_post_type_archive( 'tin_pass' ) || is_tax( 'danh_muc' ) ),
+		array( 'title' => 'Trang chủ', 'url' => pn_main_url( '/' ), 'current' => ! $blog_mode && is_front_page() ),
+		array( 'title' => 'Tìm Pass', 'url' => pn_listings_url(), 'current' => ! $blog_mode && ( is_post_type_archive( 'tin_pass' ) || is_tax( 'danh_muc' ) ) ),
 		array( 'title' => 'Đăng Pass', 'url' => pn_app_url(), 'current' => false ),
 		array( 'title' => 'Đăng nhu cầu', 'url' => pn_app_url(), 'current' => false ),
-		array( 'title' => 'Cộng tác viên', 'url' => home_url( '/#ctv' ), 'current' => false ),
-		array( 'title' => 'Blog', 'url' => pn_blog_url(), 'current' => is_home() || is_singular( 'post' ) ),
-		array( 'title' => 'Hỗ trợ', 'url' => home_url( '/#ho-tro' ), 'current' => false ),
+		array( 'title' => 'Cộng tác viên', 'url' => pn_main_url( '/#ctv' ), 'current' => false ),
+		array( 'title' => 'Blog', 'url' => pn_blog_url(), 'current' => is_home() || is_singular( 'post' ) || is_category() || ( $blog_mode && is_search() ) ),
+		array( 'title' => 'Hỗ trợ', 'url' => pn_main_url( '/#ho-tro' ), 'current' => false ),
 	);
 }
 
 /** Trang theo slug (dùng cho liên kết Điều khoản, Quyền riêng tư ở chân trang). */
 function pn_page_url( $slug ) {
+	if ( pn_is_blog_install() ) {
+		// Trang pháp lý nằm trên web chính.
+		return pn_main_url( '/' . $slug . '.html' );
+	}
 	$page = get_page_by_path( $slug );
 	return $page ? get_permalink( $page ) : '';
 }
