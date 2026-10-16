@@ -356,3 +356,28 @@ function pn_page_url( $slug ) {
 function pn_brand_markup() {
 	echo '<img class="brand-logo" src="' . esc_url( pn_img( 'logo.webp' ) ) . '" alt="PassNhanh — Đăng nhanh, tìm nhanh, chốt nhanh" width="596" height="144">';
 }
+
+/**
+ * Nội dung bài đã chèn sẵn ảnh đại diện chưa (cùng ảnh trong thư viện, hoặc cùng file ảnh).
+ * Dùng để không in ảnh đại diện lần nữa ở đầu bài.
+ */
+function pn_content_has_thumbnail( $post = null ) {
+	$post     = get_post( $post );
+	$thumb_id = $post ? (int) get_post_thumbnail_id( $post ) : 0;
+	if ( ! $thumb_id ) {
+		return false;
+	}
+	$content = (string) $post->post_content;
+	if ( false !== strpos( $content, 'wp-image-' . $thumb_id . '"' ) || false !== strpos( $content, 'wp-image-' . $thumb_id . ' ' ) || false !== strpos( $content, '"id":' . $thumb_id . ',' ) || false !== strpos( $content, '"id":' . $thumb_id . '}' ) ) {
+		return true;
+	}
+	$file = get_attached_file( $thumb_id );
+	if ( $file ) {
+		// So theo tên file gốc (bỏ đuôi kích thước -1024x683, -scaled).
+		$base = preg_replace( '/(-\d+x\d+|-scaled)?\.[a-z0-9]+$/i', '', wp_basename( $file ) );
+		if ( '' !== $base && preg_match( '/' . preg_quote( $base, '/' ) . '(-\d+x\d+|-scaled)?\.[a-z0-9]+/i', $content ) ) {
+			return true;
+		}
+	}
+	return false;
+}
