@@ -59,7 +59,7 @@ Cài một lần:
 
 Đăng bài: Bài viết → Viết bài mới → nhập tiêu đề, nội dung, **Tóm tắt** (dùng làm mô tả trên Google, ~150 ký tự), **Ảnh đại diện** (ngang, ≥ 1200×630), chọn chuyên mục → Đăng.
 
-SEO có sẵn trong theme: thẻ mô tả, canonical, Open Graph, dữ liệu có cấu trúc `BlogPosting` + `BreadcrumbList` + `Organization`, sitemap `/blog/wp-sitemap.xml` (đã khai báo trong `robots.txt`), trang tìm kiếm `noindex`, ẩn trang tác giả và danh sách tài khoản. Nếu sau này cài plugin SEO (Yoast, Rank Math…) theme tự tắt phần thẻ meta để không trùng.
+SEO: blog đang dùng **Yoast SEO** (thẻ mô tả, canonical, Open Graph, schema `Organization`/`WebSite`/`BlogPosting`/`BreadcrumbList`, sitemap `/blog/sitemap_index.xml` đã khai báo trong `robots.txt`, `llms.txt` tại `/blog/llms.txt`). Theme tự tắt phần thẻ meta riêng khi có Yoast; vẫn giữ: tìm kiếm `noindex`, ẩn trang tác giả và danh sách tài khoản. Analytics/Search Console qua plugin **Site Kit by Google**.
 
 Trang chủ HTML tự lấy 4 bài mới nhất từ `/blog/wp-json/` để hiện ở mục "Bài viết & Cẩm nang".
 
